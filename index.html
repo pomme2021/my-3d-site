@@ -1,25 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My 3D Site</title>
-    <!-- This is a special Google link that rarely gets blocked -->
-    <script type="module" src="https://googleapis.com"></script>
-</head>
-<body style="margin: 0; background: #111; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; color: white;">
+<!-- Import the component -->
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js"></script>
 
-    <h1>My 3D Model</h1>
-
-    <!-- This box handles the 3D work automatically -->
-    <model-viewer 
-        src="model.stl" 
-        alt="My 3D Model" 
-        auto-rotate 
-        camera-controls 
-        style="width: 80%; height: 600px; background-color: #222; border: 1px solid #444;">
-    </model-viewer>
-
-    <p>Click and drag to rotate!</p>
-
-</body>
-</html>
-
+<!-- Use it like any other HTML element -->
+<model-viewer alt="Neil Armstrong's Spacesuit from the Smithsonian Digitization Programs Office and National Air and Space Museum" src="shared-assets/models/NeilArmstrong.glb" ar environment-image="shared-assets/environments/moon_1k.hdr" poster="shared-assets/models/NeilArmstrong.webp" shadow-intensity="1" camera-controls touch-action="pan-y"></model-viewer>
