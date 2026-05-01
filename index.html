@@ -3,47 +3,59 @@
 <head>
     <title>3D Success</title>
     <style>body { margin: 0; background: #111; overflow: hidden; font-family: sans-serif; }</style>
-    <!-- Use these specific 'esm' links - GitHub prefers them -->
-    <script type="module">
-        import * as THREE from 'https://skypack.dev';
-        import { STLLoader } from 'https://skypack.dev/examples/jsm/loaders/STLLoader.js';
-        import { OrbitControls } from 'https://skypack.dev/examples/jsm/controls/OrbitControls.js';
-
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
-
-        scene.add(new THREE.AmbientLight(0x404040));
-        const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(5, 5, 5);
-        scene.add(light);
-
-        const controls = new OrbitControls(camera, renderer.domElement);
-        const loader = new STLLoader();
-
-        // CHANGE THIS TO YOUR EXACT FILE NAME
-        loader.load('riverjoined.stl', function (geometry) {
-            const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
-            const mesh = new THREE.Mesh(geometry, material);
-            geometry.center();
-            geometry.computeBoundingSphere();
-            camera.position.z = geometry.boundingSphere.radius * 2.5; 
-            scene.add(mesh);
-
-            function animate() {
-                requestAnimationFrame(animate);
-                controls.update();
-                renderer.render(scene, camera);
-            }
-            animate();
-        }, undefined, function(err) {
-            document.body.innerHTML = "<h1 style='color:white'>Error: Could not find your STL file. Check the name!</h1>";
-        });
-    </script>
+    
+    <!-- 1. Use standard scripts (NOT modules) to avoid CORS blocks -->
+    <script src="https://cloudflare.com"></script>
+    <script src="https://jsdelivr.net"></script>
+    <script src="https://jsdelivr.net"></script>
 </head>
 <body>
+    <div id="status" style="color: white; position: fixed; top: 10px; left: 10px;">Loading...</div>
+
+    <script>
+        // 2. Wait for everything to load
+        window.onload = function() {
+            if (typeof THREE === 'undefined') {
+                document.getElementById('status').innerText = "Engine Blocked. Try on your Phone.";
+                return;
+            }
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // Lights
+            scene.add(new THREE.AmbientLight(0x404040));
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(5, 5, 5);
+            scene.add(light);
+
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            const loader = new THREE.STLLoader();
+
+            // 3. CHANGE 'model.stl' TO YOUR EXACT FILE NAME
+            loader.load('riverjoined.stl', function (geometry) {
+                const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+                const mesh = new THREE.Mesh(geometry, material);
+                geometry.center();
+                geometry.computeBoundingSphere();
+                camera.position.z = geometry.boundingSphere.radius * 2.5; 
+                scene.add(mesh);
+                document.getElementById('status').style.display = 'none';
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    controls.update();
+                    renderer.render(scene, camera);
+                }
+                animate();
+            }, undefined, function(err) {
+                document.getElementById('status').innerText = "Error: Cannot find model.stl";
+                document.getElementById('status').style.color = "red";
+            });
+        };
+    </script>
 </body>
 </html>
-
