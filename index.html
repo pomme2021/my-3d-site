@@ -24,7 +24,7 @@
         const loader = new STLLoader();
 
         // CHANGE THIS TO YOUR EXACT FILE NAME
-        loader.load('riverbend_sky.stl', function (geometry) {
+        loader.load('riverjoined.stl', function (geometry) {
             const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
             const mesh = new THREE.Mesh(geometry, material);
             geometry.center();
